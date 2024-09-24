@@ -3,7 +3,10 @@ import { colourTypes, PokemonCardProps } from "../utils/types";
 export default function PokemonCard({ pokemon }: PokemonCardProps) {
   return (
     <>
-      <div className="w-60 py-2 px-3 shadow-xl border-2 border-gray-200 rounded-2xl">
+      <div
+        className="w-60 py-2 px-3 shadow-[0_0_5px_rgba(255,0,0,0.6)] border-2 border-red-200 rounded-2xl 
+                   transition duration-300 ease-in-out transform hover:scale-105 hover:bg-red-200"
+      >
         {/* Display Pokémon Image */}
         {pokemon.sprites.front_default && (
           <img
