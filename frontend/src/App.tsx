@@ -16,7 +16,7 @@ function App() {
   const fetchPokemonBatch = async (start: number, count: number) => {
     const promises = [];
     for (let i = start; i < start + count; i++) {
-      promises.push(axios.get(`http://localhost:5000/api/pokemon/${i}`));
+      promises.push(axios.get(`${import.meta.env.VITE_API_URL}/api/pokemon/${i}`));
     }
     return await Promise.all(promises);
   };
