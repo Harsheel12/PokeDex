@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { PokemonType, pokemonTypes } from "./utils/types";
 import PokemonCard from "./components/PokemonCard";
-import { Loader, Select, Button } from "@mantine/core";
+import { Loader, Select, Button, TextInput } from "@mantine/core";
 
 function App() {
   const [pokemonData, setPokemonData] = useState<PokemonType[]>([]);
@@ -10,6 +10,7 @@ function App() {
   const [offset, setOffset] = useState<number>(10);
   const [sortOption, setSortOption] = useState<string>("lowest-number");
   const [typeFilter, setTypeFilter] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   // Reusable function to fetch Pokemon data
   const fetchPokemonBatch = async (start: number, count: number) => {
@@ -97,15 +98,26 @@ function App() {
   };
 
   // Filtered Pokemon data
-  const filteredPokemonData = typeFilter
-    ? pokemonData.filter((pokemon) =>
-        pokemon.types.some((typeObj) => typeObj.type.name === typeFilter)
-      )
-    : pokemonData;
+  const filteredPokemonData = pokemonData.filter((pokemon) => {
+    const matchesName = pokemon.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesId = pokemon.id.toString().includes(searchTerm);
+    const matchesType = typeFilter
+      ? pokemon.types.some((typeObj) => typeObj.type.name === typeFilter)
+      : true;
+
+    return (matchesName || matchesId) && matchesType;
+  });
 
   return (
     <>
-      <div className="flex flex-col items-center max-w-screen px-5 md:px-20">
+      <div className="flex flex-col items-center max-w-screen py-10 px-5 md:px-20">
+        <TextInput
+          placeholder="Search by name or number"
+          value={searchTerm}
+          onChange={(event) => setSearchTerm(event.currentTarget.value)}
+          className="mb-4 w-64"
+        />
+
         {/* Select for sorting options */}
         <Select
           label="Sort Pokemon By"
@@ -120,16 +132,16 @@ function App() {
           ]}
           value={sortOption}
           onChange={(value) => setSortOption(value ?? "")}
-          className="mb-4"
+          className="mb-4 w-64"
         />
 
         <Select
-          label="Filter Pokémon by Type"
+          label="Filter Pokemon by Type"
           placeholder="Pick a type"
           data={pokemonTypes.map((type) => ({ value: type, label: type }))}
           value={typeFilter}
           onChange={filterByType}
-          className="mb-4"
+          className="mb-4 w-64"
         />
 
         <Button onClick={clearFilters} className="mb-4" color="red">
