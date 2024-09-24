@@ -110,43 +110,54 @@ function App() {
 
   return (
     <>
-      <div className="flex flex-col items-center max-w-screen py-10 px-5 md:px-20">
-        <TextInput
-          placeholder="Search by name or number"
-          value={searchTerm}
-          onChange={(event) => setSearchTerm(event.currentTarget.value)}
-          className="mb-4 w-64"
-        />
+      <div className="flex flex-col items-center max-w-screen py-10 px-5 sm:px-10 lg:px-20">
+        <h1 className="font-bold text-3xl underline text-center">Welcome to the Pokedex</h1>
 
-        {/* Select for sorting options */}
-        <Select
-          label="Sort Pokemon By"
-          placeholder="Pick a filter"
-          data={[
-            { value: "lowest-number", label: "Lowest Number (First)" },
-            { value: "highest-number", label: "Highest Number (First)" },
-            { value: "lowest-weight", label: "Lowest Weight (First)" },
-            { value: "highest-weight", label: "Highest Weight (First)" },
-            { value: "lowest-height", label: "Lowest Height (First)" },
-            { value: "highest-height", label: "Highest Height (First)" },
-          ]}
-          value={sortOption}
-          onChange={(value) => setSortOption(value ?? "")}
-          className="mb-4 w-64"
-        />
+        <h2 className="text-lg text-center my-3">
+          The place where you can find all the info you want about your favourite Pokemons!
+        </h2>
 
-        <Select
-          label="Filter Pokemon by Type"
-          placeholder="Pick a type"
-          data={pokemonTypes.map((type) => ({ value: type, label: type }))}
-          value={typeFilter}
-          onChange={filterByType}
-          className="mb-4 w-64"
-        />
+        <div className="w-full flex flex-col items-center my-3">
+          <div className="flex flex-col md:flex-row items-center md:items-end">
+            <Select
+              label="Sort Pokemon By"
+              placeholder="Pick a filter"
+              data={[
+                { value: "lowest-number", label: "Lowest Number (First)" },
+                { value: "highest-number", label: "Highest Number (First)" },
+                { value: "lowest-weight", label: "Lowest Weight (First)" },
+                { value: "highest-weight", label: "Highest Weight (First)" },
+                { value: "lowest-height", label: "Lowest Height (First)" },
+                { value: "highest-height", label: "Highest Height (First)" },
+              ]}
+              value={sortOption}
+              onChange={(value) => setSortOption(value ?? "")}
+              className="mb-4 w-full md:w-64"
+            />
 
-        <Button onClick={clearFilters} className="mb-4" color="red">
-          Clear Filters
-        </Button>
+            <Select
+              label="Filter Pokemon by Type"
+              placeholder="Pick a type"
+              data={pokemonTypes.map((type) => ({ value: type, label: type }))}
+              value={typeFilter}
+              onChange={filterByType}
+              className="mb-4 w-full md:w-64 mx-5"
+            />
+
+            <Button onClick={clearFilters} className="mb-4" color="red">
+              Clear Filters
+            </Button>
+          </div>
+
+          <h1 className="text-center my-3">Can't find what you are looking for? Search below :)</h1>
+
+          <TextInput
+            placeholder="Search by name or number"
+            value={searchTerm}
+            onChange={(event) => setSearchTerm(event.currentTarget.value)}
+            className="mb-4 w-full md:w-1/2"
+          />
+        </div>
 
         {loading ? (
           <div className="flex justify-center items-center h-screen">
@@ -165,12 +176,9 @@ function App() {
           </>
         )}
 
-        <button
-          onClick={loadMorePokemon}
-          className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-        >
+        <Button loading={loading} onClick={loadMorePokemon} className="my-4" size="lg" color="blue">
           Load More
-        </button>
+        </Button>
       </div>
     </>
   );
