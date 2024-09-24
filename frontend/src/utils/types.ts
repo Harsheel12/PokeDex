@@ -44,3 +44,24 @@ export const colourTypes: { [key: string]: string } = {
   unknown: "bg-gray-500",
   shadow: "bg-black",
 };
+
+export const pokemonTypes: string[] = [
+  "normal",
+  "fighting",
+  "flying",
+  "poison",
+  "ground",
+  "rock",
+  "bug",
+  "ghost",
+  "steel",
+  "fire",
+  "water",
+  "grass",
+  "electric",
+  "psychic",
+  "ice",
+  "dragon",
+  "dark",
+  "fairy",
+];

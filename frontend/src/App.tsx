@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { PokemonType } from "./utils/types";
+import { PokemonType, pokemonTypes } from "./utils/types";
 import PokemonCard from "./components/PokemonCard";
 import { Loader, Select } from "@mantine/core";
 
@@ -9,6 +9,7 @@ function App() {
   const [loading, setLoading] = useState<boolean>(true);
   const [offset, setOffset] = useState<number>(10);
   const [sortOption, setSortOption] = useState<string>("");
+  const [typeFilter, setTypeFilter] = useState<string | null>(null);
 
   // Reusable function to fetch Pokemon data
   const fetchPokemonBatch = async (start: number, count: number) => {
@@ -78,16 +79,28 @@ function App() {
     setPokemonData(sortedData);
   };
 
-  // Effect to sort Pokémon data whenever the sort option changes
   useEffect(() => {
     if (sortOption) {
       sortPokemonData(sortOption);
     }
-  }, [sortOption, pokemonData]);
+  }, [sortOption]);
+
+  // Function to filter Pokemon by type
+  const filterByType = (type: string | null) => {
+    setTypeFilter(type);
+  };
+
+  // Filtered Pokemon data
+  const filteredPokemonData = typeFilter
+    ? pokemonData.filter((pokemon) =>
+        pokemon.types.some((typeObj) => typeObj.type.name === typeFilter)
+      )
+    : pokemonData;
 
   return (
     <>
       <div className="flex flex-col items-center max-w-screen px-5 md:px-20">
+        {/* Select for sorting options */}
         <Select
           label="Sort Pokemon By"
           placeholder="Pick a filter"
@@ -103,6 +116,14 @@ function App() {
           className="mb-4"
         />
 
+        <Select
+          label="Filter Pokémon by Type"
+          placeholder="Pick a type"
+          data={pokemonTypes.map((type) => ({ value: type, label: type }))}
+          onChange={filterByType}
+          className="mb-4"
+        />
+
         {loading ? (
           <div className="flex justify-center items-center h-screen">
             <Loader color="blue" size="xl" />
@@ -111,7 +132,7 @@ function App() {
           <>
             {/* Pokémon Data */}
             <div className="w-full flex flex-wrap justify-center">
-              {pokemonData.map((pokemon) => (
+              {filteredPokemonData.map((pokemon) => (
                 <div key={pokemon.id} className="m-5">
                   <PokemonCard pokemon={pokemon} />
                 </div>
