@@ -1,4 +1,4 @@
-import { PokemonCardProps } from "../utils/types";
+import { colourTypes, PokemonCardProps } from "../utils/types";
 
 export default function PokemonCard({ pokemon }: PokemonCardProps) {
   return (
@@ -23,7 +23,10 @@ export default function PokemonCard({ pokemon }: PokemonCardProps) {
         <h2>Types:</h2>
         <div className="flex justify-center gap-2">
           {pokemon.types.map((typeObj) => (
-            <span key={typeObj.slot} className="px-2 py-1 bg-blue-200 rounded-md">
+            <span
+              key={typeObj.slot}
+              className={`px-2 py-1 rounded-md ${colourTypes[typeObj.type.name]}`}
+            >
               {typeObj.type.name}
             </span>
           ))}
