@@ -2,12 +2,13 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { PokemonType } from "./utils/types";
 import PokemonCard from "./components/PokemonCard";
-import { Loader } from "@mantine/core";
+import { Loader, Select } from "@mantine/core";
 
 function App() {
   const [pokemonData, setPokemonData] = useState<PokemonType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [offset, setOffset] = useState<number>(10); // Start offset for loading more Pokemon
+  const [offset, setOffset] = useState<number>(10);
+  const [sortOption, setSortOption] = useState<string>("");
 
   // Reusable function to fetch Pokemon data
   const fetchPokemonBatch = async (start: number, count: number) => {
@@ -47,17 +48,69 @@ function App() {
     }
   };
 
+  // Function to sort Pokemon data based on selected option
+  const sortPokemonData = (option: string) => {
+    let sortedData = [...pokemonData];
+
+    switch (option) {
+      case "lowest-number":
+        sortedData.sort((a, b) => a.id - b.id);
+        break;
+      case "highest-number":
+        sortedData.sort((a, b) => b.id - a.id);
+        break;
+      case "lowest-weight":
+        sortedData.sort((a, b) => a.weight - b.weight);
+        break;
+      case "highest-weight":
+        sortedData.sort((a, b) => b.weight - a.weight);
+        break;
+      case "lowest-height":
+        sortedData.sort((a, b) => a.height - b.height);
+        break;
+      case "highest-height":
+        sortedData.sort((a, b) => b.height - a.height);
+        break;
+      default:
+        break;
+    }
+
+    setPokemonData(sortedData);
+  };
+
+  // Effect to sort Pokémon data whenever the sort option changes
+  useEffect(() => {
+    if (sortOption) {
+      sortPokemonData(sortOption);
+    }
+  }, [sortOption, pokemonData]);
+
   return (
     <>
-      <div className="flex flex-col items-center max-w-screen px-5 md:px-20 ">
+      <div className="flex flex-col items-center max-w-screen px-5 md:px-20">
+        <Select
+          label="Sort Pokemon By"
+          placeholder="Pick a filter"
+          data={[
+            { value: "lowest-number", label: "Lowest Number (First)" },
+            { value: "highest-number", label: "Highest Number (First)" },
+            { value: "lowest-weight", label: "Lowest Weight (First)" },
+            { value: "highest-weight", label: "Highest Weight (First)" },
+            { value: "lowest-height", label: "Lowest Height (First)" },
+            { value: "highest-height", label: "Highest Height (First)" },
+          ]}
+          onChange={(value) => setSortOption(value ?? "")}
+          className="mb-4"
+        />
+
         {loading ? (
           <div className="flex justify-center items-center h-screen">
             <Loader color="blue" size="xl" />
           </div>
         ) : (
           <>
-            {/* Pokemon Data */}
-            <div className="w-full flex flex-wrap justify-center ">
+            {/* Pokémon Data */}
+            <div className="w-full flex flex-wrap justify-center">
               {pokemonData.map((pokemon) => (
                 <div key={pokemon.id} className="m-5">
                   <PokemonCard pokemon={pokemon} />
