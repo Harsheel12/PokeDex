@@ -1,10 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { PokemonType } from "./utils/types";
+import PokemonCard from "./components/PokemonCard";
 
 function App() {
-  const [pokemonData, setPokemonData] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [offset, setOffset] = useState(5); // Start offset for loading more Pokemon
+  const [pokemonData, setPokemonData] = useState<PokemonType[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [offset, setOffset] = useState<number>(10); // Start offset for loading more Pokemon
 
   // Reusable function to fetch Pokemon data
   const fetchPokemonBatch = async (start: number, count: number) => {
@@ -50,8 +52,8 @@ function App() {
     <>
       <div className="flex flex-wrap">
         {pokemonData.map((pokemon) => (
-          <div className="w-52 h-20 bg-slate-500 m-5">
-            <h1 key={pokemon.id}>{pokemon.name}</h1>
+          <div key={pokemon.id} className="m-5">
+            <PokemonCard pokemon={pokemon} />
           </div>
         ))}
       </div>
