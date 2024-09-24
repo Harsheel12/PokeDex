@@ -2,13 +2,13 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { PokemonType, pokemonTypes } from "./utils/types";
 import PokemonCard from "./components/PokemonCard";
-import { Loader, Select } from "@mantine/core";
+import { Loader, Select, Button } from "@mantine/core";
 
 function App() {
   const [pokemonData, setPokemonData] = useState<PokemonType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [offset, setOffset] = useState<number>(10);
-  const [sortOption, setSortOption] = useState<string>("");
+  const [sortOption, setSortOption] = useState<string>("lowest-number");
   const [typeFilter, setTypeFilter] = useState<string | null>(null);
 
   // Reusable function to fetch Pokemon data
@@ -90,6 +90,12 @@ function App() {
     setTypeFilter(type);
   };
 
+  // Function to clear filters
+  const clearFilters = () => {
+    setSortOption("");
+    setTypeFilter(null);
+  };
+
   // Filtered Pokemon data
   const filteredPokemonData = typeFilter
     ? pokemonData.filter((pokemon) =>
@@ -112,6 +118,7 @@ function App() {
             { value: "lowest-height", label: "Lowest Height (First)" },
             { value: "highest-height", label: "Highest Height (First)" },
           ]}
+          value={sortOption}
           onChange={(value) => setSortOption(value ?? "")}
           className="mb-4"
         />
@@ -120,9 +127,14 @@ function App() {
           label="Filter Pokémon by Type"
           placeholder="Pick a type"
           data={pokemonTypes.map((type) => ({ value: type, label: type }))}
+          value={typeFilter}
           onChange={filterByType}
           className="mb-4"
         />
+
+        <Button onClick={clearFilters} className="mb-4" color="red">
+          Clear Filters
+        </Button>
 
         {loading ? (
           <div className="flex justify-center items-center h-screen">
