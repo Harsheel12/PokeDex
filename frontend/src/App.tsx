@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { PokemonType } from "./utils/types";
 import PokemonCard from "./components/PokemonCard";
+import { Loader } from "@mantine/core";
 
 function App() {
   const [pokemonData, setPokemonData] = useState<PokemonType[]>([]);
@@ -46,23 +47,33 @@ function App() {
     }
   };
 
-  if (loading) return <p>Loading...</p>;
-
   return (
     <>
-      <div className="flex flex-wrap">
-        {pokemonData.map((pokemon) => (
-          <div key={pokemon.id} className="m-5">
-            <PokemonCard pokemon={pokemon} />
+      <div className="flex flex-col items-center max-w-screen px-5 md:px-20 ">
+        {loading ? (
+          <div className="flex justify-center items-center h-screen">
+            <Loader color="blue" size="xl" />
           </div>
-        ))}
+        ) : (
+          <>
+            {/* Pokemon Data */}
+            <div className="w-full flex flex-wrap justify-center ">
+              {pokemonData.map((pokemon) => (
+                <div key={pokemon.id} className="m-5">
+                  <PokemonCard pokemon={pokemon} />
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+
+        <button
+          onClick={loadMorePokemon}
+          className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+        >
+          Load More
+        </button>
       </div>
-      <button
-        onClick={loadMorePokemon}
-        className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-      >
-        Load More
-      </button>
     </>
   );
 }
