@@ -1,3 +1,4 @@
+import React from "react";
 import { colourTypes, PokemonCardProps } from "../utils/types";
 
 export default function PokemonCard({ pokemon }: PokemonCardProps) {
