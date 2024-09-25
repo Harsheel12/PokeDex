@@ -78,3 +78,21 @@ yarn run dev
 ```
 
 You should see a `http://localhost:5173/` URL link which you can click to launch the frontend
+
+### Testing the Project
+
+1. Navigate to the `frontend` directory and run the commands below to execute the test cases
+
+**NOTE:** The 3 commands below should be run on the `Pokedex\frontend` directory
+
+```sh
+cd frontend
+```
+
+```sh
+yarn install
+```
+
+```sh
+yarn test
+```
